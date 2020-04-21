@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Counter from '../Counter/Counter';
 import './LandingPage.scss';
 
@@ -6,33 +6,33 @@ const axios = require('axios');
 const rce = React.createElement;
 
 function LandingPage(props) {
-    const timeLimit = props.state.timeLimit;
+    const landingPage = JSON.parse(JSON.stringify(props.state)); // somewhat deep copy
     const setTimeLimit = (value) => {
-        props.state.timeLimit = value;
-        props.setState(props.state);
+        landingPage.timeLimit = value;
+        props.setState(landingPage);
     };
 
     function begin() {
         axios
             .post('http://localhost:9000/game/new-game', {
-                timeLimit: timeLimit
+                timeLimit: landingPage.timeLimit
             })
             .then(res => {
                 console.log(`statusCode: ${res.statusCode}`)
                 console.log(res)
-                props.state.gameStarted = true;
-                props.setState(props.state);
+                landingPage.gameStarted = true;
+                props.setState(landingPage);
             })
             .catch(error => {
                 console.error(error)
             });
     }
 
-    return rce('div', {className: {'LandingPage ' + props.state.gameStarted ?  'hidden' : ''}},
+    return rce('div', {className: landingPage.gameStarted ?  'LandingPage hidden' : 'LandingPage'},
         rce('h5', {className: 'header'},
             'To start a new game enter the time limit for each round, then click begin'
         ),
-        rce(Counter, {quantity: timeLimit, setQuantity: setTimeLimit, step: 5, min: 20, max: 90}),
+        rce(Counter, {quantity: landingPage.timeLimit, setQuantity: setTimeLimit, step: 5, min: 20, max: 90}),
         rce('button', {onClick: begin}, 'begin')
     )
 }
