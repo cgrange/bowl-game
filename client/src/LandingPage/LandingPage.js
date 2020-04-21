@@ -32,7 +32,7 @@ function LandingPage(props) {
         rce('h5', {className: 'header'},
             'To start a new game enter the time limit for each round, then click begin'
         ),
-        rce(Counter, {quantity: landingPage.timeLimit, setQuantity: setTimeLimit, step: 5, min: 20, max: 90}),
+        rce(Counter, {quantity: landingPage.timeLimit || 45, setQuantity: setTimeLimit, step: 5, min: 20, max: 90}),
         rce('button', {onClick: begin}, 'begin')
     )
 }
