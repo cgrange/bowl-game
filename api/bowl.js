@@ -5,10 +5,15 @@ class Bowl {
 
     addPrompts(newPrompts) {
         this.prompts = this.prompts.concat(newPrompts);
+        this.shufflePrompts();
     }
 
     nextPrompt() {
-        return this.prompts.pop();
+        if (this.prompts.length > 0) {
+            return this.prompts.pop();
+        } else {
+            return null;
+        }
     }
 
     shufflePrompts() {

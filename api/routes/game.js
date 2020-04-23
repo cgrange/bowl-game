@@ -1,42 +1,44 @@
 const express = require('express');
 const router = express.Router();
 const Game = require('../game');
+const sse = require('sse-broadcast')();
 let game = null;
+
+const getLobbyState = function() {
+    if (game === null) {
+        return {
+            timeLimit: 45,
+            gameStarted: false,
+            team1Score: 0,
+            team2Score: 0,
+            team1sTurn: true,
+            promptsLeft: 0
+        };
+    } else {
+        return {
+            timeLimit: game.timeLimit,
+            gameStarted: true,
+            team1Score: game.team1Score,
+            team2Score: game.team2Score,
+            team1sTurn: game.team1sTurn,
+            promptsLeft: game.promptsLeft
+        };
+    }
+}
 
 router.post('/new-game', (req, res, next) => {
     game = new Game(req.body.timeLimit);
     res.send('success');
+    sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));
 });
 
 router.post('/post-prompts', function(req, res, next) {
     game.addPrompts(req.body.prompts);
     res.send('success');
+    sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));
 });
 
-router.post('/end-round', (req, res, next) => {
-    console.log('ending round');
-    game.endRound(req.body.unfinishedPrompts);
-    res.send('success');
-});
-
-// get state
-
-router.get('/landing-page', (req, res, next) => {
-    if (game === null) {
-        res.json({timeLimit: 45, gameStarted: false});
-    } else {
-        res.json({timeLimit: game.timeLimit, gameStarted: true});
-    }
-});
-
-router.get('/lobby', (req, res, next) => {
-    res.send({
-        team1Score: game.team1Score,
-        team2Score: game.team2Score,
-        promptsLeft: game.bowl.prompts.length,
-        team1sTurn: game.team1sTurn
-    });
-});
+// arena calls
 
 router.get('/start-round', (req, res, next) => {
     const response = game.startRound();
@@ -48,12 +50,25 @@ router.get('/start-round', (req, res, next) => {
     }
 });
 
-router.get('/skip', (req, res, next) => {
-    res.json(game.skip());
-});
-
 router.get('/next', (req, res, next) => {
     res.json(game.next());
+    sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));
+});
+
+router.post('/end-round', (req, res, next) => {
+    console.log('ending round');
+    game.endRound(req.body.unfinishedPrompts);
+    res.send('success');
+    sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));
+});
+
+// get events 
+//      lobby and waiting area data is broadcasted on subscription basis
+//      clients subscribe to those broadcasts here
+
+router.get('/events', (req, res, next) => {
+    sse.subscribe('lobby', res);
+    sse.sendEvent(res, 'state-change', JSON.stringify(getLobbyState()));
 });
 
 module.exports = router;

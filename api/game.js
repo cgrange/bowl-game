@@ -8,6 +8,7 @@ class Game {
         this.team1sTurn = true;
         this.timeLimit = timeLimit;
         this.inRound = false;
+        this.promptsLeft = 0;
     }
 
     startRound() {
@@ -16,8 +17,11 @@ class Game {
         } else {
             this.inRound = true;
             const prompts = [];
-            prompts.push(this.bowl.nextPrompt());
-            prompts.push(this.bowl.nextPrompt());
+            for (let i = 0; i < 3; i++) {
+                if (this.bowl.nextPrompt() !== null) {
+                    prompts.push(this.bowl.nextPrompt());
+                }
+            }
 
             return {
                 timeLimit: this.timeLimit,
@@ -30,6 +34,7 @@ class Game {
         try {
             return {nextPrompt: this.bowl.nextPrompt()};
         } finally {
+            this.promptsLeft--;
             if (this.team1sTurn) {
                 this.team1Score++;
             } else {
@@ -38,19 +43,16 @@ class Game {
         }
     }
 
-    skip() {
-        return {nextPrompt: this.bowl.nextPrompt()};
-    }
-
     endRound(prompts) {
         this.bowl.addPrompts(prompts); // the prompts that they didn't complete
         this.team1sTurn = !this.team1sTurn;
-        this.bowl.shufflePrompts;
+        this.bowl.shufflePrompts();
         this.inRound = false;
     }
 
     addPrompts(newPrompts) {
         this.bowl.addPrompts(newPrompts);
+        this.promptsLeft = this.bowl.prompts.length;
     }
 }
 
