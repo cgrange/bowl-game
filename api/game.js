@@ -18,8 +18,9 @@ class Game {
             this.inRound = true;
             const prompts = [];
             for (let i = 0; i < 3; i++) {
-                if (this.bowl.nextPrompt() !== null) {
-                    prompts.push(this.bowl.nextPrompt());
+                const nextPrompt = this.bowl.nextPrompt();
+                if (nextPrompt !== null) {
+                    prompts.push(nextPrompt);
                 }
             }
 
