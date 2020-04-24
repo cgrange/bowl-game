@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.scss';
 import LandingPage from './LandingPage/LandingPage';
 import Lobby from './Lobby/Lobby';
+import PromptPage from './PromptPage/PromptPage';
 
 const rce = React.createElement;
 
@@ -11,6 +12,8 @@ function App() {
 
   const [lobby, setLobby] = useState({});
   const lobbyProps = {state: lobby, setState: setLobby};
+
+  const [prompts, setPrompts] = useState(['', '', '', '', '']);
 
   useEffect(() => {
     const eventSource = new EventSource('http://localhost:9000/game/events');
@@ -52,6 +55,12 @@ function App() {
   return rce('div', {className: 'App'},
     rce(LandingPage, landingPageProps),
     rce(Lobby, lobbyProps),
+    rce(PromptPage,
+      {
+        state: prompts,
+        setState: setPrompts
+      }
+    )
   )
 }
 
