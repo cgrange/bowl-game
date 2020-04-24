@@ -12,7 +12,6 @@ function PromptPage(props) {
     function handlePromptChange(event) {
         const newPrompt = event.target.value;
         const index = parseInt(event.target.getAttribute('idx'));
-        console.log('newPrompt: ' + newPrompt + ', index: ' + index);
         prompts[index] = newPrompt;
         props.setState(prompts);
     }
