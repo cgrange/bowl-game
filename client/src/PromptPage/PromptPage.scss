@@ -1,0 +1,12 @@
+.PromptPage {
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    z-index: 4;
+
+    .prompts-list {
+        list-style-type: none;
+        padding-left: 0;
+        margin: 8px 0;
+    }
+}

@@ -54,13 +54,10 @@ function App() {
 
   return rce('div', {className: 'App'},
     rce(LandingPage, landingPageProps),
+    rce('div', {className: landingPageProps.state.gameStarted ? '' : 'hidden'}, 
+      rce(PromptPage, {state: prompts, setState: setPrompts})
+    ),
     rce(Lobby, lobbyProps),
-    rce(PromptPage,
-      {
-        state: prompts,
-        setState: setPrompts
-      }
-    )
   )
 }
 

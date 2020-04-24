@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Axios from 'axios';
 import './PromptPage.scss'
 
@@ -8,6 +8,7 @@ const rce = React.createElement;
 //  state: ['', '', '', '', '']
 function PromptPage(props) {
     const prompts = props.state.slice();
+    const [submitted, setSubmitted] = useState(false);
 
     function handlePromptChange(event) {
         const newPrompt = event.target.value;
@@ -28,13 +29,14 @@ function PromptPage(props) {
         }).then(res =>{
             console.log(`statusCode: ${res.statusCode}`);
             console.log(res);
+            setSubmitted(true);
         }).catch(error => {
             console.log(error);
             console.log(error.stack);
         });
     }
 
-    return rce('div', {className: 'prompt-page'},
+    return rce('div', {className: submitted ? 'PromptPage hidden' : 'PromptPage'},
         rce('ul', {className: 'prompts-list'}, promptItems),
         rce('button', {className: 'submit-button', onClick: submit}, 'submit')
     );

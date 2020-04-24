@@ -1,5 +1,21 @@
 .LandingPage {
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    z-index: 5;
+
     &.hidden {
         display: none;
+    }
+
+    .begin-button {
+        margin-bottom: 16px
+    }
+
+    .counter-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 12px
     }
 }
