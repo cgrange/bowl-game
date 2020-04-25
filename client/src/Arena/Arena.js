@@ -32,7 +32,7 @@ function Arena(props) {
             } else {
                 Axios.get(endCycleUrl)
                     .then(res => {
-                        arenaState.prompts = res.data.prompts
+                        arenaState.prompts = arenaState.prompts.concat(res.data.prompts);
                         props.setState(arenaState);
                     }).catch(err => {
                         console.log(err);
