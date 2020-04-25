@@ -3,6 +3,7 @@ import './App.scss';
 import LandingPage from './LandingPage/LandingPage';
 import Lobby from './Lobby/Lobby';
 import PromptPage from './PromptPage/PromptPage';
+import { eventsUrl } from './config';
 
 const rce = React.createElement;
 
@@ -16,7 +17,7 @@ function App() {
   const [prompts, setPrompts] = useState(['', '', '', '', '']);
 
   useEffect(() => {
-    const eventSource = new EventSource('http://localhost:9000/game/events');
+    const eventSource = new EventSource(eventsUrl);
     eventSource.onopen = (e) => {
       console.log('open: ' + e.data);
     };
@@ -37,7 +38,6 @@ function App() {
       }
     };
     eventSource.addEventListener('state-change', (e) => {
-      console.log('state-change' + e.data);
       const gameState = JSON.parse(e.data);
       setLandingPage({
         timeLimit: gameState.timeLimit,

@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Axios from 'axios';
+import Arena from '../Arena/Arena';
 import './Lobby.scss';
+
+import { startRoundUrl } from '../config';
 
 const rce = React.createElement;
 
 function Lobby(props) {
     const lobby = JSON.parse(JSON.stringify(props.state));
+    const [arena, setArena] = useState({inArena: false});
+    const arenaProps = {state: arena, setState: setArena};
 
     function enterArena() {
-        alert('entering arena!');
+        // todo show countdown
+        Axios.get(startRoundUrl)
+            .then(res => {
+                setArena({inArena: true, ...res.data})
+            }).catch(err => console.log(err));
     }
 
     return rce('div', {className: 'Lobby'},
@@ -17,7 +27,8 @@ function Lobby(props) {
             rce('h1', {className: 'team-score'}, 'Team 2: ' + lobby.team2Score),
         ),
         rce('h4', {className: 'turn-tracker'}, lobby.team1sTurn ? 'Team 1\'s Turn' : 'Team 2\'s Turn'),
-        rce('button', {className: 'arena-button', onClick: enterArena}, 'ENTER ARENA!')
+        rce('button', {className: 'arena-button', onClick: enterArena}, 'ENTER ARENA!'),
+        rce(Arena, arenaProps)
     );
 }
 

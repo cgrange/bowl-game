@@ -1,6 +1,7 @@
 import React from 'react';
 import Counter from '../Counter/Counter';
 import './LandingPage.scss';
+import { newGameUrl } from '../config';
 
 const axios = require('axios');
 const rce = React.createElement;
@@ -14,12 +15,10 @@ function LandingPage(props) {
 
     function begin() {
         axios
-            .post('http://localhost:9000/game/new-game', {
+            .post(newGameUrl, {
                 timeLimit: landingPage.timeLimit
             })
             .then(res => {
-                console.log(`statusCode: ${res.statusCode}`)
-                console.log(res)
                 landingPage.gameStarted = true;
                 props.setState(landingPage);
             })

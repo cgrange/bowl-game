@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import './PromptPage.scss'
+import { postPromptsUrl } from '../config';
 
 const rce = React.createElement;
 
@@ -24,11 +25,9 @@ function PromptPage(props) {
     });
 
     function submit() {
-        Axios.post('http://localhost:9000/game/post-prompts', {
+        Axios.post(postPromptsUrl, {
             prompts: prompts
         }).then(res =>{
-            console.log(`statusCode: ${res.statusCode}`);
-            console.log(res);
             setSubmitted(true);
         }).catch(error => {
             console.log(error);
