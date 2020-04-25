@@ -55,9 +55,14 @@ router.get('/next', (req, res, next) => {
     sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));
 });
 
+router.get('/end-cycle', (req, res, next) => {
+    res.json(game.endCycle());
+});
+
 router.post('/end-round', (req, res, next) => {
     console.log('ending round');
     game.endRound(req.body.unfinishedPrompts);
+    console.log('all prompts: ' + game.bowl.prompts);
     res.send('success');
     sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));
 });

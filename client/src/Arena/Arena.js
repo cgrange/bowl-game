@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
-import {endRoundUrl, nextUrl} from '../config';
+import {endRoundUrl, nextUrl, endCycleUrl} from '../config';
 
 const rce = React.createElement;
 
@@ -25,11 +25,28 @@ function Arena(props) {
 
     function getNext() {
         arenaState.prompts.shift();
+        if (arenaState.prompts.length === 0) {
+            if (arenaState.skippedPrompt) {
+                arenaState.prompts.push(arenaState.skippedPrompt);
+                arenaState.skippedPrompt = null;
+            } else {
+                Axios.get(endCycleUrl)
+                    .then(res => {
+                        arenaState.prompts = res.data.prompts
+                        props.setState(arenaState);
+                    }).catch(err => {
+                        console.log(err);
+                    });
+                alert('That\'s all the prompts! Pause time and prepare for the next round');
+            }
+        }
         props.setState(arenaState);
         Axios.get(nextUrl)
             .then(res => {
-                arenaState.prompts.push(res.data.nextPrompt);
-                props.setState(arenaState);
+                if (res.data.nextPrompt !== null) {
+                    arenaState.prompts.push(res.data.nextPrompt);
+                    props.setState(arenaState);
+                }
             }).catch(err => {
                 console.log(err);
             });
@@ -55,6 +72,8 @@ function Arena(props) {
         if (arenaState.skippedPrompt) {
             unfinishedPrompts.push(arenaState.skippedPrompt);
         }
+        arenaState.inArena = false;
+        props.setState(arenaState);
         Axios.post(endRoundUrl, {
             unfinishedPrompts: unfinishedPrompts
         }).then(res => {
@@ -64,11 +83,15 @@ function Arena(props) {
         });
     }
 
+    function canSkip() {
+        return arenaState.prompts.length > 1 || arenaState.skippedPrompt;
+    }
+
     return arenaState.inArena ? 
         rce('div', {className: 'Arena'},
             rce('h1', {className: 'active-prompt'}, arenaState.prompts[0]),
             rce('button', {className: 'next-button', onClick: getNext}, 'next'),
-            rce('button', {className: 'skip-button', onClick: skip}, 'skip'),
+            rce('button', {className: canSkip() ? 'skip-button' : 'hidden', onClick: skip}, 'skip'),
             rce('button', {className: 'finish-button', onClick: finish}, 'finish')
         )
         :

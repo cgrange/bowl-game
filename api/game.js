@@ -3,6 +3,7 @@ const Bowl = require('./bowl');
 class Game {
     constructor(timeLimit) {
         this.bowl = new Bowl();
+        this.allPrompts = [];
         this.team1Score = 0;
         this.team2Score = 0;
         this.team1sTurn = true;
@@ -51,8 +52,23 @@ class Game {
         this.inRound = false;
     }
 
+    endCycle() {
+        if (this.bowl.prompts.length !== 0) {
+            console.log('trying to end cycle but the current bowl isn\'t empty!');
+        } else {
+            this.bowl.addPrompts(this.allPrompts);
+        }
+        this.bowl.shufflePrompts();
+        const prompts = [];
+        prompts.push(this.bowl.nextPrompt());
+        prompts.push(this.bowl.nextPrompt());
+
+        return { prompts: prompts };
+    }
+
     addPrompts(newPrompts) {
         this.bowl.addPrompts(newPrompts);
+        this.allPrompts = this.allPrompts.concat(newPrompts);
         this.promptsLeft = this.bowl.prompts.length;
     }
 }

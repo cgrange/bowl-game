@@ -5,3 +5,4 @@ exports.nextUrl = serverUrl + '/next';
 exports.startRoundUrl = serverUrl + '/start-round';
 exports.eventsUrl = serverUrl + '/events';
 exports.endRoundUrl = serverUrl + '/end-round';
+exports.endCycleUrl = serverUrl + '/end-cycle';
