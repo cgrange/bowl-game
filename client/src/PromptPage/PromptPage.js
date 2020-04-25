@@ -35,9 +35,14 @@ function PromptPage(props) {
         });
     }
 
+    function skip() {
+        setSubmitted(true);
+    }
+
     return rce('div', {className: submitted ? 'PromptPage hidden' : 'PromptPage'},
         rce('ul', {className: 'prompts-list'}, promptItems),
-        rce('button', {className: 'submit-button', onClick: submit}, 'submit')
+        rce('button', {className: 'submit-button', onClick: submit}, 'submit'),
+        rce('button', {className: 'skip-button', onClick: skip}, 'skip')
     );
 }
 
