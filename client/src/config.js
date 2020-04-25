@@ -1,6 +1,7 @@
-exports.serverUrl = "http://localhost:9000/game";
-exports.newGameUrl = this.serverUrl + '/new-game';
-exports.postPromptsUrl = this.serverUrl + '/post-prompts';
-exports.nextUrl = this.serverUrl + '/next';
-exports.startRoundUrl = this.serverUrl + '/start-round';
-exports.eventsUrl = this.serverUrl + '/events';
+const serverUrl = "http://localhost:9000/game";
+exports.newGameUrl = serverUrl + '/new-game';
+exports.postPromptsUrl = serverUrl + '/post-prompts';
+exports.nextUrl = serverUrl + '/next';
+exports.startRoundUrl = serverUrl + '/start-round';
+exports.eventsUrl = serverUrl + '/events';
+exports.endRoundUrl = serverUrl + '/end-round';

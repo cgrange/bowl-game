@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
-import {severUrl, nextUrl} from '../config';
+import {endRoundUrl, nextUrl} from '../config';
 
 const rce = React.createElement;
 
@@ -50,11 +50,26 @@ function Arena(props) {
         }
     }
 
+    function finish() {
+        const unfinishedPrompts = arenaState.prompts;
+        if (arenaState.skippedPrompt) {
+            unfinishedPrompts.push(arenaState.skippedPrompt);
+        }
+        Axios.post(endRoundUrl, {
+            unfinishedPrompts: unfinishedPrompts
+        }).then(res => {
+            console.log(res.data);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
     return arenaState.inArena ? 
         rce('div', {className: 'Arena'},
             rce('h1', {className: 'active-prompt'}, arenaState.prompts[0]),
             rce('button', {className: 'next-button', onClick: getNext}, 'next'),
-            rce('button', {className: 'skip-button', onClick: skip}, 'skip')
+            rce('button', {className: 'skip-button', onClick: skip}, 'skip'),
+            rce('button', {className: 'finish-button', onClick: finish}, 'finish')
         )
         :
         rce('div');
