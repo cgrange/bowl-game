@@ -51,7 +51,7 @@ router.get('/start-round', (req, res, next) => {
 });
 
 router.get('/next', (req, res, next) => {
-    res.json(game.next());
+    res.json("success");
     sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));
 });
 
@@ -63,7 +63,7 @@ router.post('/end-round', (req, res, next) => {
     console.log('ending round');
     game.endRound(req.body.unfinishedPrompts);
     console.log('all prompts: ' + game.bowl.prompts);
-    res.send('success');
+    res.json('success');
     sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));
 });
 

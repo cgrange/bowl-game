@@ -11,7 +11,9 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/api/bin/www"
+            "program": "${workspaceFolder}/api/bin/www",
+            "outputCapture": "std",
+            "console": "integratedTerminal",
         }
     ]
 }

@@ -1,9 +1,15 @@
-const Bowl = require('./bowl');
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+        [arr[i], arr[j]] = [arr[j], arr[i]]; //swap j and i
+    }
+    return arr;
+}
 
 class Game {
     constructor(timeLimit) {
-        this.bowl = new Bowl();
         this.allPrompts = [];
+        this.tempPrompts = [];
         this.team1Score = 0;
         this.team2Score = 0;
         this.team1sTurn = true;
@@ -17,59 +23,43 @@ class Game {
             return null;
         } else {
             this.inRound = true;
-            const prompts = [];
-            for (let i = 0; i < 3; i++) {
-                const nextPrompt = this.bowl.nextPrompt();
-                if (nextPrompt !== null) {
-                    prompts.push(nextPrompt);
-                }
-            }
 
             return {
                 timeLimit: this.timeLimit,
-                prompts: prompts
+                prompts: this.tempPrompts.splice(0)
             }
         }
     }
 
     next() {
-        try {
-            return {nextPrompt: this.bowl.nextPrompt()};
-        } finally {
-            this.promptsLeft--;
-            if (this.team1sTurn) {
-                this.team1Score++;
-            } else {
-                this.team2Score++;
-            }
+        this.promptsLeft--;
+        if (this.team1sTurn) {
+            this.team1Score++;
+        } else {
+            this.team2Score++;
         }
     }
 
     endRound(prompts) {
-        this.bowl.addPrompts(prompts); // the prompts that they didn't complete
+        this.tempPrompts = this.tempPrompts.concat(prompts); // the prompts that they didn't complete
         this.team1sTurn = !this.team1sTurn;
-        this.bowl.shufflePrompts();
+        this.tempPrompts = shuffleArray(this.tempPrompts);
         this.inRound = false;
     }
 
     endCycle() {
-        if (this.bowl.prompts.length !== 0) {
-            console.log('trying to end cycle but the current bowl isn\'t empty!');
-        } else {
-            this.bowl.addPrompts(this.allPrompts);
-        }
-        this.bowl.shufflePrompts();
-        const prompts = [];
-        prompts.push(this.bowl.nextPrompt());
-        prompts.push(this.bowl.nextPrompt());
+        this.tempPrompts = this.tempPrompts.concat(this.allPrompts);
+        this.promptsLeft = this.tempPrompts.length;
+        this.tempPrompts = shuffleArray(this.tempPrompts);
 
-        return { prompts: prompts };
+        return { prompts: this.tempPrompts.splice(0) };
     }
 
     addPrompts(newPrompts) {
-        this.bowl.addPrompts(newPrompts);
         this.allPrompts = this.allPrompts.concat(newPrompts);
-        this.promptsLeft = this.bowl.prompts.length;
+        this.tempPrompts = this.tempPrompts.concat(newPrompts);
+        this.promptsLeft = this.tempPrompts.length;
+        this.tempPrompts = shuffleArray(this.tempPrompts);
     }
 }
 
