@@ -14,15 +14,15 @@ class Game {
         this.team2Score = 0;
         this.team1sTurn = true;
         this.timeLimit = timeLimit;
-        this.inRound = false;
+        this.inTurn = false;
         this.promptsLeft = 0;
     }
 
-    startRound() {
-        if (this.inRound) {
+    startTurn() {
+        if (this.inTurn) {
             return null;
         } else {
-            this.inRound = true;
+            this.inTurn = true;
 
             return {
                 timeLimit: this.timeLimit,
@@ -40,14 +40,14 @@ class Game {
         }
     }
 
-    endRound(prompts) {
+    endTurn(prompts) {
         this.tempPrompts = this.tempPrompts.concat(prompts); // the prompts that they didn't complete
         this.team1sTurn = !this.team1sTurn;
         this.tempPrompts = shuffleArray(this.tempPrompts);
-        this.inRound = false;
+        this.inTurn = false;
     }
 
-    endCycle() {
+    endRound() {
         this.tempPrompts = this.tempPrompts.concat(this.allPrompts);
         this.promptsLeft = this.tempPrompts.length;
         this.tempPrompts = shuffleArray(this.tempPrompts);

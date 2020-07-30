@@ -39,14 +39,13 @@ router.post('/post-prompts', function(req, res, next) {
 });
 
 // arena calls
-
-router.get('/start-round', (req, res, next) => {
-    const response = game.startRound();
+router.get('/start-turn', (req, res, next) => {
+    const response = game.startTurn();
     if (response === null) {
-        res.json('already in the middle of a round');
+        res.json({valid:false});
     } else {
-        console.log('starting round');
-        res.json(response);
+        console.log('starting turn');
+        res.json({valid:true, ...response});
     }
 });
 
@@ -55,13 +54,13 @@ router.get('/next', (req, res, next) => {
     sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));
 });
 
-router.get('/end-cycle', (req, res, next) => {
-    res.json(game.endCycle());
+router.get('/end-round', (req, res, next) => {
+    res.json(game.endRound());
 });
 
-router.post('/end-round', (req, res, next) => {
-    console.log('ending round');
-    game.endRound(req.body.unfinishedPrompts);
+router.post('/end-turn', (req, res, next) => {
+    console.log('ending turn');
+    game.endTurn(req.body.unfinishedPrompts);
     console.log('all prompts: ' + game.bowl.prompts);
     res.json('success');
     sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));

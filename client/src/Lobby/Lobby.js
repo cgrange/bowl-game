@@ -3,7 +3,7 @@ import Axios from 'axios';
 import Arena from '../Arena/Arena';
 import './Lobby.scss';
 
-import { startRoundUrl } from '../config';
+import { startTurnUrl } from '../config';
 
 const rce = React.createElement;
 
@@ -14,9 +14,14 @@ function Lobby(props) {
 
     function enterArena() {
         // todo show countdown
-        Axios.get(startRoundUrl)
+        Axios.get(startTurnUrl)
             .then(res => {
-                setArena({inArena: true, ...res.data})
+                if (res.valid) {
+                    setArena({inArena: true, ...res.data});
+                } else {
+                    alert('someone is already taking their turn');
+                }
+                
             }).catch(err => console.log(err));
     }
 

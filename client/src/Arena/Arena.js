@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
-import {endRoundUrl, nextUrl, endCycleUrl} from '../config';
+import {endRoundUrl, nextUrl, endTurnUrl} from '../config';
 
 const rce = React.createElement;
 
@@ -23,7 +23,7 @@ function Arena(props) {
         arenaState.prompts.shift();
         props.setState(arenaState);
         if (arenaState.prompts.length === 0) {
-            Axios.get(endCycleUrl)
+            Axios.get(endRoundUrl)
                 .then(res => {
                     arenaState.prompts = arenaState.prompts.concat(res.data.prompts);
                     props.setState(arenaState);
@@ -45,8 +45,9 @@ function Arena(props) {
         // console.log('prompts: ' + arenaState.prompts);
         // console.log('skippedPrompt: ' + arenaState.skippedPrompt);
         const last = arenaState.prompts.pop();
-        const first = arenaState.prompts.splice(0, 1, last);
+        const first = arenaState.prompts.splice(0, 1, last)[0];
         arenaState.prompts.push(first);
+        props.setState(arenaState);
     }
 
     function finish() {
@@ -54,7 +55,7 @@ function Arena(props) {
 
         arenaState.inArena = false;
         props.setState(arenaState);
-        Axios.post(endRoundUrl, {
+        Axios.post(endTurnUrl, {
             unfinishedPrompts: unfinishedPrompts
         }).then(res => {
             console.log(res.data);
