@@ -14,8 +14,6 @@ function App() {
   const [lobby, setLobby] = useState({});
   const lobbyProps = {state: lobby, setState: setLobby};
 
-  const [prompts, setPrompts] = useState(['', '', '', '', '']);
-
   useEffect(() => {
     const eventSource = new EventSource(eventsUrl);
     eventSource.onopen = (e) => {
@@ -55,7 +53,7 @@ function App() {
   return rce('div', {className: 'App'},
     rce(LandingPage, landingPageProps),
     rce('div', {className: landingPageProps.state.gameStarted ? '' : 'hidden'}, 
-      rce(PromptPage, {state: prompts, setState: setPrompts})
+      rce(PromptPage)
     ),
     rce(Lobby, lobbyProps),
   )

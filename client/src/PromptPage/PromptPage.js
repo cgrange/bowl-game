@@ -5,17 +5,15 @@ import { postPromptsUrl } from '../config';
 
 const rce = React.createElement;
 
-//props
-//  state: ['', '', '', '', '']
-function PromptPage(props) {
-    const prompts = props.state.slice();
+function PromptPage() {
+    const [prompts, setPrompts] = useState(['', '', '', '', '']);
     const [submitted, setSubmitted] = useState(false);
 
     function handlePromptChange(event) {
         const newPrompt = event.target.value;
         const index = parseInt(event.target.getAttribute('idx'));
         prompts[index] = newPrompt;
-        props.setState(prompts);
+        setPrompts(prompts.splice(0));
     }
 
     const promptItems = prompts.map((val, index) => {
@@ -42,7 +40,7 @@ function PromptPage(props) {
     return rce('div', {className: submitted ? 'PromptPage hidden' : 'PromptPage'},
         rce('ul', {className: 'prompts-list'}, promptItems),
         rce('button', {className: 'submit-button', onClick: submit}, 'submit'),
-        rce('button', {className: 'skip-button', onClick: skip}, 'skip')
+        rce('button', {className: 'skip-button', onClick: skip}, 'skip'),
     );
 }
 
