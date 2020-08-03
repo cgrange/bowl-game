@@ -57,6 +57,7 @@ router.get('/next', (req, res, next) => {
 
 router.get('/end-round', (req, res, next) => {
     res.json(game.endRound());
+    sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));
 });
 
 router.post('/end-turn', (req, res, next) => {

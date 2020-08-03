@@ -51,6 +51,11 @@ class Game {
         this.tempPrompts = this.tempPrompts.concat(this.allPrompts);
         this.promptsLeft = this.tempPrompts.length;
         this.tempPrompts = shuffleArray(this.tempPrompts);
+        if (this.team1sTurn) {
+            this.team1Score++;
+        } else {
+            this.team2Score++;
+        }
 
         return { prompts: this.tempPrompts.splice(0) };
     }

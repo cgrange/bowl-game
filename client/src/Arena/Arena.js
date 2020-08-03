@@ -32,13 +32,13 @@ function Arena(props) {
             alert('That\'s all the prompts! Pause time and prepare for the next round');
         } else {
             props.setState(arenaState);
-        }
-        Axios.get(nextUrl)
+            Axios.get(nextUrl)
             .then(res => {
                 console.log(res);
             }).catch(err => {
                 console.log(err);
             });
+        }
     }
 
     function skip() { //should put last element at front and first element at back
