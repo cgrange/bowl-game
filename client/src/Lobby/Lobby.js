@@ -16,7 +16,7 @@ function Lobby(props) {
         // todo show countdown
         Axios.get(startTurnUrl)
             .then(res => {
-                if (res.valid) {
+                if (res.data.valid) {
                     setArena({inArena: true, ...res.data});
                 } else {
                     alert('someone is already taking their turn');

@@ -61,7 +61,7 @@ router.get('/end-round', (req, res, next) => {
 router.post('/end-turn', (req, res, next) => {
     console.log('ending turn');
     game.endTurn(req.body.unfinishedPrompts);
-    console.log('all prompts: ' + game.bowl.prompts);
+    console.log('temp prompts: ' + game.tempPrompts);
     res.json('success');
     sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));
 });

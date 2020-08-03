@@ -21,7 +21,6 @@ function Arena(props) {
 
     function getNext() {
         arenaState.prompts.shift();
-        props.setState(arenaState);
         if (arenaState.prompts.length === 0) {
             Axios.get(endRoundUrl)
                 .then(res => {
@@ -31,6 +30,8 @@ function Arena(props) {
                     console.log(err);
                 });
             alert('That\'s all the prompts! Pause time and prepare for the next round');
+        } else {
+            props.setState(arenaState);
         }
         Axios.get(nextUrl)
             .then(res => {
