@@ -51,6 +51,7 @@ router.get('/start-turn', (req, res, next) => {
 
 router.get('/next', (req, res, next) => {
     res.json("success");
+    game.next();
     sse.publish('lobby', 'state-change', JSON.stringify(getLobbyState()));
 });
 
