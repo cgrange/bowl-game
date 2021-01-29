@@ -16,7 +16,8 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
-    "sse-broadcast": "^0.5.2"
+    "sse-broadcast": "^0.5.2",
+    "yarn": "^1.22.10"
   },
   "main": "app.js",
   "devDependencies": {},
