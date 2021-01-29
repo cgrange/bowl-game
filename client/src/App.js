@@ -32,6 +32,7 @@ function App() {
         // if error was fatal
         case EventSource.CLOSED:
           console.log('Connection failed. Will not retry.');
+          alert('Connection failed! please refresh your page.');
           break;
       }
     };
