@@ -1,4 +1,4 @@
-client/build
-node_modules
+node_modules/*
 client/node_modules/*
+client/build/*
 package-lock.json
