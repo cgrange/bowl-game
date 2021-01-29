@@ -1,4 +1,4 @@
-const serverUrl = "http://localhost:9000/game";
+const serverUrl = "/game";
 exports.newGameUrl = serverUrl + '/new-game';
 exports.postPromptsUrl = serverUrl + '/post-prompts';
 exports.nextUrl = serverUrl + '/next';
